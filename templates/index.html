@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fake Account Detector - LITE CODERS</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🔍 Who-are-you?</h1>
+            <p>Enter a Twitter profile URL to analyze its authenticity using AI</p>
+        </header>
+
+        <div class="analysis-form">
+            <form action="/analyze" method="POST">
+                <div class="input-group">
+                    <input type="text" name="profile_url" 
+                           placeholder="https://twitter.com/username or https://x.com/username" 
+                           required>
+                    <button type="submit">Analyze Account</button>
+                </div>
+            </form>
+        </div>
+
+        {% if error %}
+        <div class="error-message">
+            {{ error }}
+        </div>
+        {% endif %}
+
+        <div class="features">
+            <h3>What We Analyze:</h3>
+            <div class="feature-grid">
+                <div class="feature-item">
+                    <span class="icon">📊</span>
+                    <span>Behavior Patterns</span>
+                </div>
+                <div class="feature-item">
+                    <span class="icon">🔢</span>
+                    <span>Account Metrics</span>
+                </div>
+                <div class="feature-item">
+                    <span class="icon">⏱️</span>
+                    <span>Activity History</span>
+                </div>
+                <div class="feature-item">
+                    <span class="icon">🆔</span>
+                    <span>Profile Authenticity</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

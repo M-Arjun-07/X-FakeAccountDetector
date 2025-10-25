@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analysis Result - Fake Account Detector</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🔍 Analysis Result</h1>
+            <a href="/" class="back-link">← Analyze Another Account</a>
+        </header>
+
+        <div class="result-card">
+            <div class="profile-header">
+                <h2>@{{ result.username }}</h2>
+                <a href="{{ result.profile_url }}" target="_blank" class="profile-link">View Profile</a>
+            </div>
+
+            <div class="trust-score-display">
+                <div class="score-circle" data-score="{{ result.trust_score }}">
+                    <div class="score-value">{{ result.trust_score }}/1000</div>
+                    <div class="score-label">{{ result.trust_level }} TRUST</div>
+                </div>
+            </div>
+
+            <div class="verdict {% if result.is_fake %}fake{% else %}real{% endif %}">
+                <h3>Verdict: {% if result.is_fake %}🚨 POTENTIALLY FAKE ACCOUNT{% else %}✅ LIKELY GENUINE ACCOUNT{% endif %}</h3>
+                <p>Confidence: {{ (result.probability * 100)|round(1) }}%</p>
+            </div>
+
+            <div class="account-details">
+                <h4>Account Details</h4>
+                <div class="details-grid">
+                    <div class="detail-item">
+                        <span class="label">Followers:</span>
+                        <span class="value">{{ result.account_details.followers|format_number }}</span>
+                    </div>
+                    <!-- <div class="detail-item">
+                        <span class="label">Following:</span>
+                        <span class="value">{{ result.account_details.following|format_number }}</span>
+                    </div> -->
+                    <div class="detail-item">
+                        <span class="label">Tweets:</span>
+                        <span class="value">{{ result.account_details.tweets|format_number }}</span>
+                    </div>
+                    <!-- <div class="detail-item">
+                        <span class="label">Account Age:</span>
+                        <span class="value">{{ result.account_details.account_age_days }} days</span>
+                    </div> -->
+                    <!-- <div class="detail-item">
+                        <span class="label">Verified:</span>
+                        <span class="value {% if result.account_details.verified %}verified{% else %}not-verified{% endif %}">
+                            {{ 'Yes' if result.account_details.verified else 'No' }}
+                        </span>
+                    </div> -->
+                </div>
+            </div>
+
+            {% if result.is_demo %}
+            <div class="demo-warning">
+                <strong>⚠️ Demo Mode:</strong> Using synthetic data based on username patterns. 
+                For real analysis, integrate with social media APIs.
+            </div>
+            {% endif %}
+
+            {% if result.is_real_data %}
+            <div class="real-data-badge">
+                <span class="badge">✅ REAL API DATA</span>
+                <small>Analysis based on actual Twitter API data</small>
+            </div>
+            {% endif %}
+
+            <div class="reasons-section">
+                <h4>Key Findings:</h4>
+                <ul class="reasons-list">
+                    {% for reason in result.reasons %}
+                    <li>{{ reason }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+
+            <div class="disclaimer">
+                <p><strong>Note:</strong> This analysis is based on machine learning patterns and should be used as a reference only. Always verify through official channels.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Animate trust score circle
+        document.addEventListener('DOMContentLoaded', function() {
+            const scoreCircle = document.querySelector('.score-circle');
+            const score = parseInt(scoreCircle.getAttribute('data-score'));
+            const percentage = (score / 1000) * 100;
+            
+            // Set color based on score
+            if (score >= 800) {
+                scoreCircle.style.background = `conic-gradient(#10b981 ${percentage}%, #e5e7eb ${percentage}%)`;
+            } else if (score >= 600) {
+                scoreCircle.style.background = `conic-gradient(#3b82f6 ${percentage}%, #e5e7eb ${percentage}%)`;
+            } else if (score >= 400) {
+                scoreCircle.style.background = `conic-gradient(#f59e0b ${percentage}%, #e5e7eb ${percentage}%)`;
+            } else if (score >= 200) {
+                scoreCircle.style.background = `conic-gradient(#ef4444 ${percentage}%, #e5e7eb ${percentage}%)`;
+            } else {
+                scoreCircle.style.background = `conic-gradient(#dc2626 ${percentage}%, #e5e7eb ${percentage}%)`;
+            }
+        });
+    </script>
+</body>
+</html>
